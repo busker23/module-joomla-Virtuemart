@@ -254,6 +254,11 @@ class plgVmPaymentPlatron extends vmPSPlugin
         return $this->declarePluginParams('payment', $name, $id, $data);
     }
 
+    function plgVmDeclarePluginParamsPaymentVM3(&$data)
+    {
+        return $this->declarePluginParams('payment', $data);
+    }
+
     function plgVmSetOnTablePluginParamsPayment($name, $id, &$table)
     {
         return $this->setOnTablePluginParams($name, $id, $table);
@@ -297,6 +302,7 @@ class plgVmPaymentPlatron extends vmPSPlugin
 			case 'check':
 				$arrParams = $_GET;
 				$thisScriptName = PG_Signature::getOurScriptName();
+                $arrParams['pg_sig'] = PG_Signature::make($thisScriptName, $arrParams, $method->platron_secret);
 
 				if ( !PG_Signature::check($arrParams['pg_sig'], $thisScriptName, $arrParams, $method->platron_secret) )
 					die("Bad signature");
